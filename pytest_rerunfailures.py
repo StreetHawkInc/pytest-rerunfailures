@@ -1,4 +1,5 @@
 import re
+import sys
 import time
 import warnings
 
@@ -111,8 +112,8 @@ def check_options(config):
     val = config.getvalue
     if not val("collectonly"):
         if config.option.reruns != 0:
-            if config.option.usepdb:  # a core option
-                raise pytest.UsageError("--reruns incompatible with --pdb")
+            if config.option.usepdb and not sys.stdout.isatty():  # a core option
+                raise pytest.UsageError("--reruns incompatible with --pdb when not attached to tty")
 
     resultlog = _get_resultlog(config)
     if resultlog:
